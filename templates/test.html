@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Test</title>
+		<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+		<script src="./static/chessboardjs/js/chessboard-1.0.0.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/sweetalert"></script>
+		<link rel="stylesheet" type="text/css" href="./static/chessboardjs/css/chessboard-1.0.0.min.css">
+	</head>
+	<body>
+		<div id="board1" style="width: 400px"></div>
+		<script type="text/javascript">
+			var config = {
+			  pieceTheme: '/static/img/chesspieces/wikipedia/{piece}.png',
+			  position: 'start'
+			}
+			var board1 = Chessboard('board1', config)
+		</script>
+		<button id="set">Set FEN</button>
+		<input id="fen" name="fen" type="text">
+		<button id="load">Load</button>
+		<script type="text/javascript">
+			$("#set").on('click',function(){
+				 board1.position($(" #fen ").val())
+			});
+			$("#load").on('click',function(){
+				$.get('/api',function(data){
+					var i = 0;
+					setInterval(function(){
+						board1.position(data[i]['fen']);
+						if (data[i]['is_checkmate'])
+						{
+							swal("游戏结束","将死","error");
+						}
+						if (data[i]['is_check'])
+						{
+							if (data[i]['turn'])
+							{
+								$("[data-piece=\"wK\"]").css("background-image"," radial-gradient(red,transparent)");
+							}
+							else
+							{
+								$("[data-piece=\"bK\"]").css("background-image"," radial-gradient(red,transparent)");
+							}
+						}
+						if (data[i]['turn'])
+						{
+							document.getElementById("color").innerHTML="Black"+" "+data[i]['pov']/100;
+						}
+						else
+						{
+							document.getElementById("color").innerHTML="White"+" "+-data[i]['pov']/100;
+						}
+						i++;
+					},2000);
+				})
+			})
+		</script>
+	<p id="color">
+	</p>
+	</body>
+</html>
