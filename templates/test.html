@@ -16,13 +16,13 @@
 			}
 			var board1 = Chessboard('board1', config)
 		</script>
-		<button id="set">Set FEN</button>
-		<input id="fen" name="fen" type="text">
+		<!--<button id="set">Set FEN</button>
+		<input id="fen" name="fen" type="text">-->
 		<button id="load">Load</button>
 		<script type="text/javascript">
-			$("#set").on('click',function(){
+			/*$("#set").on('click',function(){
 				 board1.position($(" #fen ").val())
-			});
+			});*/
 			$("#load").on('click',function(){
 				$.get('/api',function(data){
 					var i = 0;
